@@ -1,8 +1,8 @@
 package com.nesposi3.AtomicModels;
 
-import com.nesposi3.Network;
+import com.nesposi3.Model;
 
-public class MemoryModel extends Network {
+public class MemoryModel extends Model {
     private int b1, b2;
     @Override
     public void delta(String[] input) {

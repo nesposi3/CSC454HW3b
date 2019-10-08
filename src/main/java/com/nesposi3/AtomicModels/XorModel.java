@@ -1,8 +1,8 @@
 package com.nesposi3.AtomicModels;
 
-import com.nesposi3.Network;
+import com.nesposi3.Model;
 
-public class XorModel extends Network {
+public class XorModel extends Model {
     private int bit;
     public XorModel(){
         this.bit = 0;

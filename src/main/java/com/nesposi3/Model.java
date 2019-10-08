@@ -1,7 +1,7 @@
 package com.nesposi3;
 
-public abstract class Network {
+public abstract class Model {
     public abstract String[] lambda();
     public abstract void delta(String[] input);
-    public Network[] children;
+    public Model[] children;
 }
