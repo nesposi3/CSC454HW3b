@@ -20,7 +20,7 @@ public class Main {
             }
         }
         String command;
-        XorNetwork network = new XorNetwork();
+        XorNetwork network = new XorNetwork(debugFlag);
         if(batchFlag){
             command = sc.nextLine();
             if(command.length()%2!=0){
@@ -32,8 +32,10 @@ public class Main {
                     String[] inp = {b1,b2};
 
                     String out = network.lambda();
-                    System.out.println(out);
+                    System.out.println(out+"\n--------------------");
                     network.delta(inp);
+                    System.out.println("--------------------");
+
                 }
             }
         }else {
