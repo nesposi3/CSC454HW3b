@@ -21,7 +21,7 @@ public class XorNetwork extends Model<String,String> {
     public String lambda() {
         for (int i = 0; i <this.children.length ; i++) {
             this.pipes[i].setVal(this.children[i].lambda());
-            System.out.println(this.pipes[i].getInput());
+            System.out.println(this.pipes[i].getInput() + children[i].getClass().toString());
         }
         return (String) this.pipes[this.pipes.length-1].getInput();
     }

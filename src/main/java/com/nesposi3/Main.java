@@ -19,19 +19,35 @@ public class Main {
                 batchFlag = true;
             }
         }
-        //System.out.println(debugFlag + " " + batchFlag);
         String command;
         XorNetwork network = new XorNetwork();
-        while (true){
+        if(batchFlag){
             command = sc.nextLine();
-            if(command.equals("exit")){
-                break;
+            if(command.length()%2!=0){
+                System.out.println("Incorrect trajectory format, uneven number of bits");
             }else{
-                int b1,b2;
-                String[] splits = command.split(" ");
-                String out = network.lambda();
-                System.out.println(out);
-                network.delta(splits);
+                for (int i = 0; i <command.length() ; i+=2) {
+                    String b1 = command.substring(i,i+1);
+                    String b2 = command.substring(i+1,i+2);
+                    String[] inp = {b1,b2};
+
+                    String out = network.lambda();
+                    System.out.println(out);
+                    network.delta(inp);
+                }
+            }
+        }else {
+
+            while (true) {
+                command = sc.nextLine();
+                if (command.equals("exit")) {
+                    break;
+                } else {
+                    String[] splits = command.split(" ");
+                    String out = network.lambda();
+                    System.out.println(out);
+                    network.delta(splits);
+                }
             }
         }
     }
