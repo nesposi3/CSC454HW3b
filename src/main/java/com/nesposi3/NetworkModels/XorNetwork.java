@@ -1,33 +1,39 @@
 package com.nesposi3.NetworkModels;
 
 import com.nesposi3.AtomicModels.MemoryModel;
+import com.nesposi3.AtomicModels.XorModel;
 import com.nesposi3.Model;
+import com.nesposi3.Pipe;
 
-public class XorNetwork extends Model {
-    int bit;
+public class XorNetwork extends Model<String,String> {
     public XorNetwork(){
         this.children = new Model[3];
-        this.children[0] = new com.nesposi3.AtomicModels.XorModel();
-        this.children[1] = new com.nesposi3.AtomicModels.XorModel();
+        this.children[0] = new XorModel();
+        this.children[1] = new XorModel();
         this.children[2] = new MemoryModel();
-        this.bit = 0;
+        this.pipes = new Pipe[3];
+        this.pipes[0] = new Pipe<String>();
+        this.pipes[1] = new Pipe<String>();
+        this.pipes[2] = new Pipe<String>();
+
     }
     @Override
-    public String[] lambda() {
-        String[] out = {""+bit};
-        return out;
+    public String lambda() {
+        for (int i = 0; i <this.children.length ; i++) {
+            this.pipes[i].setVal(this.children[i].lambda());
+            System.out.println(this.pipes[i].getInput());
+        }
+        return (String) this.pipes[this.pipes.length-1].getInput();
     }
 
     @Override
     public void delta(String[] input) {
-        com.nesposi3.AtomicModels.XorModel xor1 = (com.nesposi3.AtomicModels.XorModel) this.children[0];
-        com.nesposi3.AtomicModels.XorModel xor2 = (com.nesposi3.AtomicModels.XorModel) this.children[1];
-        MemoryModel memoryModel = (MemoryModel) this.children[2];
-        String[] xor1Out = xor1.lambda();
-        xor1.delta(input);
-        String[] xor2Input = {xor1Out[0], memoryModel.lambda()[0]};
-        String[] xor2Output = xor2.lambda();
-        memoryModel.delta(xor2Output);
-        this.bit = Integer.parseInt(xor1Out[0]);
+        String xor1Out = ((String) this.pipes[0].getInput());
+        String memOut = ((String) this.pipes[2].getInput());
+        String[] xor2In = {xor1Out,memOut};
+        String[] memIn = {(String)this.pipes[1].getInput()};
+        this.children[0].delta(input);
+        this.children[1].delta(xor2In);
+        this.children[2].delta(memIn);
     }
 }

@@ -29,7 +29,7 @@ public class Main {
             }else{
                 int b1,b2;
                 String[] splits = command.split(" ");
-                String out = network.lambda()[0];
+                String out = network.lambda();
                 System.out.println(out);
                 network.delta(splits);
             }

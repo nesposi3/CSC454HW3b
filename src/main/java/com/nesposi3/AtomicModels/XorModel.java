@@ -2,14 +2,14 @@ package com.nesposi3.AtomicModels;
 
 import com.nesposi3.Model;
 
-public class XorModel extends Model {
+public class XorModel extends Model<String,String> {
     private int bit;
     public XorModel(){
         this.bit = 0;
     }
     @Override
-    public String[] lambda() {
-        String[] out = {""+bit};
+    public String lambda() {
+        String out = ""+bit;
         return out;
     }
 

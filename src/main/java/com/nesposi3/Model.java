@@ -1,7 +1,8 @@
 package com.nesposi3;
 
-public abstract class Model {
-    public abstract String[] lambda();
-    public abstract void delta(String[] input);
+public abstract class Model<Input, Output> {
+    public abstract Output lambda();
+    public abstract void delta(Input[] input);
     public Model[] children;
+    public Pipe[] pipes;
 }
