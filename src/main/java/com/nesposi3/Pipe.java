@@ -1,11 +1,16 @@
 package com.nesposi3;
 
-public class Pipe<Input> {
-    private Input input;
-    public void setVal(Input input){
-        this.input = input;
+public class Pipe<T>{
+    private Port<T> previousOut;
+    private Port<T> nextIn;
+    public Pipe(Port<T> previousOut, Port<T> nextIn ){
+        this.nextIn = nextIn;
+        this.previousOut = previousOut;
     }
-    public Input getInput(){
-        return input;
+    public void shiftVal(T newOut){
+        nextIn.setVal(previousOut.getVal());
+        previousOut.setVal(newOut);
     }
+
+
 }
