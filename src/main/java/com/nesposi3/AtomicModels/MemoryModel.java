@@ -12,7 +12,8 @@ public class MemoryModel extends Model<String,String> {
         this.debug = debug;
         this.b1 = this.b2 = 0;
         this.inputPorts = new ArrayList<>();
-        this.outputPort = new Port<>();
+        //this.inputPorts.add(new Port<>("0"));
+        this.outputPort = new Port<>("0");
         this.pipeList = new ArrayList<>();
     }
     @Override

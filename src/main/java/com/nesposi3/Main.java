@@ -24,16 +24,17 @@ public class Main {
             }
         }
         String command;
-        Network<String,String> network = new Network<>();
+        Network<String,String> network = new Network<>("0","0");
         MemoryModel memoryModel = new MemoryModel(debugFlag);
         XorModel xor1 = new XorModel(debugFlag);
         XorModel xor2 = new XorModel(debugFlag);
+        xor2 = (XorModel) xor1.addPipe(xor1.getOutputPort(), xor2,"0");
+        xor2 = (XorModel) memoryModel.addPipe(memoryModel.getOutputPort(),xor2,"0");
+        memoryModel = (MemoryModel) xor2.addPipe(xor2.getOutputPort(),memoryModel,"0");
+        network.setFirstChild(xor1);
+        network.setFinalChild(xor2);
         network.addModel(memoryModel);
-        network.addModel(xor1);
-        network.addModel(xor2);
-        xor1.addPipe(xor1.getOutputPort(), xor2);
-        memoryModel.addPipe(memoryModel.getOutputPort(),xor2);
-        xor2.addPipe(xor2.getOutputPort(),memoryModel);
+
         if(batchFlag){
             command = sc.nextLine();
             if(command.length()%2!=0){

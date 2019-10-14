@@ -7,12 +7,15 @@ import com.nesposi3.Port;
 import java.util.ArrayList;
 
 public class Network<Input,Output> extends Model<Input,Output> {
-    public Network(){
+    private Model<Input,Output> firstChild;
+    private Model<Input, Output> finalChild;
+
+    public Network(Input defaultInput,Output defaultOutput){
         this.pipeList = new ArrayList<>();
         this.inputPorts = new ArrayList<>();
-        this.inputPorts.add(new Port<>());
-        this.inputPorts.add(new Port<>());
-        this.outputPort = new Port<Output>();
+        this.inputPorts.add(new Port<>(defaultInput));
+        this.inputPorts.add(new Port<>(defaultInput));
+        this.outputPort = new Port<Output>(defaultOutput);
         this.childList = new ArrayList<>();
     }
 
@@ -21,15 +24,27 @@ public class Network<Input,Output> extends Model<Input,Output> {
     }
     @Override
     public Output lambda() {
+        Output firstOutput = this.firstChild.lambda();
+        this.firstChild.getOutputPort().setVal(firstOutput);
+        for (Pipe<Output> p :this.firstChild.getPipes()
+             ) {
+            p.shiftVal(firstOutput);
+        }
+
         for (Model<Input,Output> m: this.childList
              ) {
             Output output = m.lambda();
             m.getOutputPort().setVal(output);
-            for(Pipe<Output> p: this.pipeList){
+            for(Pipe<Output> p: m.getPipes()){
                 p.shiftVal(output);
             }
         }
-        return this.outputPort.getVal();
+        Output finalOutput = this.finalChild.lambda();
+        for (Pipe<Output> p :this.finalChild.getPipes()
+        ) {
+            p.shiftVal(firstOutput);
+        }
+        return finalOutput;
     }
 
     @Override
@@ -37,7 +52,7 @@ public class Network<Input,Output> extends Model<Input,Output> {
         for (int i = 0; i <this.inputPorts.size() ; i++) {
             this.inputPorts.get(i).setVal(input.get(i));
         }
-
+        this.firstChild.delta(input);
         for (Model<Input,Output> m:this.childList
              ) {
             ArrayList<Port<Input>> inputPorts = m.getInputPorts();
@@ -48,5 +63,31 @@ public class Network<Input,Output> extends Model<Input,Output> {
             }
             m.delta(deltaInputs);
         }
+
+        ArrayList<Port<Input>> inputPorts = finalChild.getInputPorts();
+        ArrayList<Input> deltaInputs = new ArrayList<>();
+        for (Port<Input> p:inputPorts
+        ) {
+            deltaInputs.add(p.getVal());
+        }
+        finalChild.delta(deltaInputs);
+
     }
+
+    /**
+     * Tell the network which child to give its input to
+     * @param m
+     */
+    public void setFirstChild(Model<Input,Output> m){
+        this.firstChild = m;
+    }
+
+    /**
+     * Tell the network which child o get its output from
+     * @param m
+     */
+    public void setFinalChild(Model<Input,Output> m){
+        this.finalChild = m;
+    }
+
 }

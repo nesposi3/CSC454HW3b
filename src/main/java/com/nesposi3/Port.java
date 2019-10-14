@@ -8,4 +8,7 @@ public class Port<T> {
     public T getVal(){
         return this.t;
     }
+    public Port(T t){
+        this.t = t;
+    }
 }
