@@ -12,8 +12,6 @@ public class XorModel extends Model<String,String> {
         this.debug = debug;
         this.bit = 0;
         this.inputPorts = new ArrayList<>();
-        //this.inputPorts.add(new Port<>("0"));
-        //this.inputPorts.add(new Port<>("0"));
         this.outputPort = new Port<>("0");
         this.pipeList = new ArrayList<>();
     }

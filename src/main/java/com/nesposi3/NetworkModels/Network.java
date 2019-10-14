@@ -10,12 +10,7 @@ public class Network<Input,Output> extends Model<Input,Output> {
     private Model<Input,Output> firstChild;
     private Model<Input, Output> finalChild;
 
-    public Network(Input defaultInput,Output defaultOutput){
-        this.pipeList = new ArrayList<>();
-        this.inputPorts = new ArrayList<>();
-        this.inputPorts.add(new Port<>(defaultInput));
-        this.inputPorts.add(new Port<>(defaultInput));
-        this.outputPort = new Port<Output>(defaultOutput);
+    public Network(){
         this.childList = new ArrayList<>();
     }
 
@@ -49,9 +44,6 @@ public class Network<Input,Output> extends Model<Input,Output> {
 
     @Override
     public void delta(ArrayList<Input> input) {
-        for (int i = 0; i <this.inputPorts.size() ; i++) {
-            this.inputPorts.get(i).setVal(input.get(i));
-        }
         this.firstChild.delta(input);
         for (Model<Input,Output> m:this.childList
              ) {

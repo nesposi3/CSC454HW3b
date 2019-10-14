@@ -24,16 +24,18 @@ public class Main {
             }
         }
         String command;
-        Network<String,String> network = new Network<>("0","0");
+
+        //Defining network structure
+        Network<String,String> network = new Network<>();
         MemoryModel memoryModel = new MemoryModel(debugFlag);
         XorModel xor1 = new XorModel(debugFlag);
         XorModel xor2 = new XorModel(debugFlag);
-        xor2 = (XorModel) xor1.addPipe(xor1.getOutputPort(), xor2,"0");
-        xor2 = (XorModel) memoryModel.addPipe(memoryModel.getOutputPort(),xor2,"0");
-        memoryModel = (MemoryModel) xor2.addPipe(xor2.getOutputPort(),memoryModel,"0");
         network.setFirstChild(xor1);
         network.setFinalChild(xor2);
         network.addModel(memoryModel);
+        xor2 = (XorModel) xor1.addPipe(xor1.getOutputPort(), xor2,"0");
+        xor2 = (XorModel) memoryModel.addPipe(memoryModel.getOutputPort(),xor2,"0");
+        memoryModel = (MemoryModel) xor2.addPipe(xor2.getOutputPort(),memoryModel,"0");
 
         if(batchFlag){
             command = sc.nextLine();
@@ -47,9 +49,8 @@ public class Main {
                     input.add(b1);
                     input.add(b2);
                     String out = network.lambda();
-                    System.out.println(out+"\n--------------------");
                     network.delta(input);
-                    System.out.println("--------------------");
+                    System.out.println(out);
 
                 }
             }
@@ -59,6 +60,7 @@ public class Main {
                 command = sc.nextLine();
                 if (command.equals("exit")) {
                     break;
+
                 } else {
                     ArrayList<String> input = new ArrayList<>();
                     String[] splits = command.split(" ");
