@@ -64,7 +64,6 @@ public class Network<Input,Output> extends Model<Input,Output> {
             ArrayList<Port<Input>> inputPorts = m.getInputPorts();
             ArrayList<Input> deltaInputs = new ArrayList<>();
             for (Port<Input> p:inputPorts) {
-                System.out.println("mem port val "+p.getVal());
                 deltaInputs.add(p.getVal());
             }
             m.delta(deltaInputs);
