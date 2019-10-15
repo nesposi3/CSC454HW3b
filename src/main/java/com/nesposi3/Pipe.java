@@ -8,8 +8,8 @@ public class Pipe<T>{
         this.previousOut = previousOut;
     }
     public void shiftVal(T newOut){
-        nextIn.setVal(previousOut.getVal());
         previousOut.setVal(newOut);
+        nextIn.setVal(previousOut.getVal());
     }
 
 

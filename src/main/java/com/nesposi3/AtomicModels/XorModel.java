@@ -8,18 +8,19 @@ import java.util.List;
 
 public class XorModel extends Model<String,String> {
     private int bit;
-    public XorModel(boolean debug){
+    public XorModel(boolean debug,String name){
         this.debug = debug;
         this.bit = 0;
         this.inputPorts = new ArrayList<>();
         this.outputPort = new Port<>("0");
         this.pipeList = new ArrayList<>();
+        this.name= name;
     }
     @Override
     public String lambda() {
         String out = ""+bit;
         if(this.debug){
-            System.out.println("XorModel. Lambda: " + out );
+            System.out.println(name + " Lambda: " + out );
         }
         return out;
     }
@@ -30,7 +31,7 @@ public class XorModel extends Model<String,String> {
         int b2 = Integer.parseInt(input.get(1));
         this.bit = b1^b2;
         if(this.debug){
-            System.out.println("XorModel. Delta: " + b1 + "XOR" + b2 + "=" + this.bit );
+            System.out.println(name + " Delta: " + b1 + "XOR" + b2 + "=" + this.bit );
         }
     }
 }

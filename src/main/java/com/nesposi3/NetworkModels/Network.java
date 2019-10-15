@@ -7,15 +7,29 @@ import com.nesposi3.Port;
 import java.util.ArrayList;
 
 public class Network<Input,Output> extends Model<Input,Output> {
+    private final int numTicks;
     private Model<Input,Output> firstChild;
     private Model<Input, Output> finalChild;
 
-    public Network(){
+    public Network(int numTicks, boolean debugFlag){
         this.childList = new ArrayList<>();
+        this.numTicks = numTicks;
+        this.debug = debugFlag;
     }
 
     public void addModel(Model<Input,Output> m){
         this.childList.add(m);
+    }
+    public Output tick(ArrayList<Input> input){
+        Output finalOutput = null;
+        for (int i = 0; i <numTicks ; i++) {
+            finalOutput = lambda();
+            delta(input);
+            if (debug){
+                System.out.println("-------------");
+            }
+        }
+        return finalOutput;
     }
     @Override
     public Output lambda() {
@@ -26,6 +40,7 @@ public class Network<Input,Output> extends Model<Input,Output> {
             p.shiftVal(firstOutput);
         }
 
+
         for (Model<Input,Output> m: this.childList
              ) {
             Output output = m.lambda();
@@ -35,9 +50,9 @@ public class Network<Input,Output> extends Model<Input,Output> {
             }
         }
         Output finalOutput = this.finalChild.lambda();
-        for (Pipe<Output> p :this.finalChild.getPipes()
-        ) {
-            p.shiftVal(firstOutput);
+        for (Pipe<Output> p :this.finalChild.getPipes()) {
+            p.shiftVal(finalOutput);
+
         }
         return finalOutput;
     }
@@ -45,12 +60,11 @@ public class Network<Input,Output> extends Model<Input,Output> {
     @Override
     public void delta(ArrayList<Input> input) {
         this.firstChild.delta(input);
-        for (Model<Input,Output> m:this.childList
-             ) {
+        for (Model<Input,Output> m:this.childList) {
             ArrayList<Port<Input>> inputPorts = m.getInputPorts();
             ArrayList<Input> deltaInputs = new ArrayList<>();
-            for (Port<Input> p:inputPorts
-                 ) {
+            for (Port<Input> p:inputPorts) {
+                System.out.println("mem port val "+p.getVal());
                 deltaInputs.add(p.getVal());
             }
             m.delta(deltaInputs);
@@ -58,8 +72,7 @@ public class Network<Input,Output> extends Model<Input,Output> {
 
         ArrayList<Port<Input>> inputPorts = finalChild.getInputPorts();
         ArrayList<Input> deltaInputs = new ArrayList<>();
-        for (Port<Input> p:inputPorts
-        ) {
+        for (Port<Input> p:inputPorts) {
             deltaInputs.add(p.getVal());
         }
         finalChild.delta(deltaInputs);

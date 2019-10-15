@@ -6,7 +6,6 @@ import com.nesposi3.AtomicModels.XorModel;
 import com.nesposi3.NetworkModels.Network;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -26,16 +25,22 @@ public class Main {
         String command;
 
         //Defining network structure
-        Network<String,String> network = new Network<>();
-        MemoryModel memoryModel = new MemoryModel(debugFlag);
-        XorModel xor1 = new XorModel(debugFlag);
-        XorModel xor2 = new XorModel(debugFlag);
+        Network<String,String> network = new Network<>(3,debugFlag);
+        MemoryModel memoryModel = new MemoryModel(debugFlag,"Memory");
+        XorModel xor1 = new XorModel(debugFlag,"XOR1");
+        XorModel xor2 = new XorModel(debugFlag,"XOR2");
+        Port<String> xor2P1 = new Port<>("0");
+        Port<String> xor2P2 = new Port<>("0");
+        Port<String> memP1 = new Port<>("0");
+        xor1.addPipe(xor2P1);
+        xor2.addPort(xor2P1);
+        xor2.addPort(xor2P2);
+        xor2.addPipe(memP1);
+        memoryModel.addPort(memP1);
+        memoryModel.addPipe(xor2P2);
         network.setFirstChild(xor1);
         network.setFinalChild(xor2);
         network.addModel(memoryModel);
-        xor2 = (XorModel) xor1.addPipe(xor1.getOutputPort(), xor2,"0");
-        xor2 = (XorModel) memoryModel.addPipe(memoryModel.getOutputPort(),xor2,"0");
-        memoryModel = (MemoryModel) xor2.addPipe(xor2.getOutputPort(),memoryModel,"0");
 
         if(batchFlag){
             command = sc.nextLine();
@@ -48,8 +53,7 @@ public class Main {
                     ArrayList<String> input = new ArrayList<>();
                     input.add(b1);
                     input.add(b2);
-                    String out = network.lambda();
-                    network.delta(input);
+                    String out = network.tick(input);
                     System.out.println(out);
 
                 }
@@ -67,9 +71,8 @@ public class Main {
                     input.add(splits[0]);
                     input.add(splits[1]);
 
-                    String out = network.lambda();
+                    String out = network.tick(input);
                     System.out.println(out);
-                    network.delta(input);
                 }
             }
         }
