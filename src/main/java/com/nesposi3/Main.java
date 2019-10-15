@@ -14,6 +14,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         boolean debugFlag = false;
         boolean batchFlag = false;
+        boolean injectFlag = false;
         for (int i = 0; i <args.length ; i++) {
             if(args[i].contains("--debug") || args[i].contains("-d")){
                 debugFlag = true;
@@ -21,11 +22,14 @@ public class Main {
             if(args[i].contains("--batch") || args[i].contains("-b")){
                 batchFlag = true;
             }
+            if(args[i].contains("--inject") || args[i].contains("-i")){
+                injectFlag = true;
+            }
         }
+        int numTicks = injectFlag?1:Network.NUM_ATOMIC_TICKS;
         String command;
-
         //Defining network structure
-        Network<String,String> network = new Network<>(3,debugFlag);
+        Network<String,String> network = new Network<>(numTicks,debugFlag);
         MemoryModel memoryModel = new MemoryModel(debugFlag,"Memory");
         XorModel xor1 = new XorModel(debugFlag,"XOR1");
         XorModel xor2 = new XorModel(debugFlag,"XOR2");
@@ -59,7 +63,6 @@ public class Main {
                 }
             }
         }else {
-
             while (true) {
                 command = sc.nextLine();
                 if (command.equals("exit")) {
