@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+    private static final int NUM_ATOMIC_TICKS = 3;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -26,7 +27,7 @@ public class Main {
                 injectFlag = true;
             }
         }
-        int numTicks = injectFlag?1:Network.NUM_ATOMIC_TICKS;
+        int numTicks = injectFlag?1:NUM_ATOMIC_TICKS;
         String command;
         //Defining network structure
         Network<String,String> network = new Network<>(numTicks,debugFlag);

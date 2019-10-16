@@ -7,7 +7,6 @@ import com.nesposi3.Port;
 import java.util.ArrayList;
 
 public class Network<Input,Output> extends Model<Input,Output> {
-    public static final int NUM_ATOMIC_TICKS = 3;
     private final int numTicks;
     private Model<Input,Output> firstChild;
     private Model<Input, Output> finalChild;
